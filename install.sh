@@ -1,10 +1,13 @@
 #!/bin/bash
 set -e
 
-UUID="alt-tab-mru@aeonath"
+UUID="alt-tab-mru-switcher@miranova.studio"
 DEST="$HOME/.local/share/gnome-shell/extensions/$UUID"
 
 echo "Installing $UUID..."
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR/$UUID"
 
 mkdir -p "$DEST/schemas"
 

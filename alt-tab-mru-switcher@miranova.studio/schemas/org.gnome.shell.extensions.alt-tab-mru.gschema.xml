@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.alt-tab-mru"
-          path="/org/gnome/shell/extensions/alt-tab-mru/">
+  <schema id="org.gnome.shell.extensions.alt-tab-mru-switcher"
+          path="/org/gnome/shell/extensions/alt-tab-mru-switcher/">
 
     <key name="current-workspace-only" type="b">
       <default>false</default>
