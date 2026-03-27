@@ -1,0 +1,20 @@
+# Claude Code
+.claude
+
+# Compiled schemas
+schemas/gschemas.compiled
+
+# GNOME extension packaging
+*.zip
+*.shell-extension.zip
+
+# Editor files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

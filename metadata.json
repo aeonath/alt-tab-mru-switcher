@@ -1,9 +1,9 @@
 {
-    "uuid": "alt-tab-mru@aeonath",
+    "uuid": "alt-tab-mru-switcher@miranova.studio",
     "name": "Alt-Tab MRU Window Switcher",
-    "description": "Windows-style Alt+Tab window switcher with true MRU ordering and no application grouping",
+    "description": "Windows-style Alt+Tab for GNOME with true MRU ordering and icon-only display",
     "shell-version": ["48"],
     "version": 1,
-    "url": "",
-    "settings-schema": "org.gnome.shell.extensions.alt-tab-mru"
+    "url": "https://miranova.studio",
+    "settings-schema": "org.gnome.shell.extensions.alt-tab-mru-switcher"
 }
