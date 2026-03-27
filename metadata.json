@@ -1,0 +1,9 @@
+{
+    "uuid": "alt-tab-mru@aeonath",
+    "name": "Alt-Tab MRU Window Switcher",
+    "description": "Windows-style Alt+Tab window switcher with true MRU ordering and no application grouping",
+    "shell-version": ["48"],
+    "version": 1,
+    "url": "",
+    "settings-schema": "org.gnome.shell.extensions.alt-tab-mru"
+}

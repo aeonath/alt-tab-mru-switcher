@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.alt-tab-mru"
+          path="/org/gnome/shell/extensions/alt-tab-mru/">
+
+    <key name="current-workspace-only" type="b">
+      <default>false</default>
+      <summary>Current workspace only</summary>
+      <description>Only show windows from the current workspace in the switcher</description>
+    </key>
+
+  </schema>
+</schemalist>
