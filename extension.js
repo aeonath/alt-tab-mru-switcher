@@ -1,6 +1,8 @@
+import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
 import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
+import St from 'gi://St';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
@@ -14,6 +16,8 @@ export default class AltTabMRUExtension extends Extension {
     _modifierMask = 0;
     _modifierCheckId = 0;
     _originalStartSwitcher = null;
+    _overlay = null;
+    _iconBoxes = [];
 
     enable() {
         this._settings = this.getSettings();
@@ -225,6 +229,7 @@ export default class AltTabMRUExtension extends Extension {
         this._cycleWindows = windows;
         this._modifierMask = modifierMask;
 
+        this._showOverlay(windows);
         this._startModifierWatch();
         this._cycleStep(backward);
     }
@@ -243,6 +248,8 @@ export default class AltTabMRUExtension extends Extension {
             if (this._cycleIndex >= windows.length)
                 this._cycleIndex = 0;
         }
+
+        this._highlightIndex(this._cycleIndex);
 
         const target = windows[this._cycleIndex];
         if (target)
@@ -293,9 +300,74 @@ export default class AltTabMRUExtension extends Extension {
 
     _cleanupCycle() {
         this._stopModifierWatch();
+        this._destroyOverlay();
         this._cycling = false;
         this._cycleIndex = 0;
         this._cycleWindows = null;
         this._modifierMask = 0;
+    }
+
+    // --- Overlay (purely visual, no input handling) ---
+
+    _showOverlay(windows) {
+        this._destroyOverlay();
+
+        this._overlay = new St.BoxLayout({
+            style: 'background-color: rgba(30, 30, 30, 0.92);'
+                 + 'border-radius: 12px;'
+                 + 'padding: 16px;'
+                 + 'spacing: 12px;',
+            vertical: false,
+            reactive: false,
+        });
+
+        this._iconBoxes = [];
+
+        const tracker = Shell.WindowTracker.get_default();
+        for (const win of windows) {
+            const app = tracker.get_window_app(win);
+
+            const iconBin = new St.Bin({
+                style: 'padding: 6px; border-radius: 8px;',
+                x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+
+            const icon = app
+                ? app.create_icon_texture(48)
+                : new St.Icon({icon_name: 'application-x-executable', icon_size: 48});
+            iconBin.set_child(icon);
+
+            this._overlay.add_child(iconBin);
+            this._iconBoxes.push(iconBin);
+        }
+
+        Main.uiGroup.add_child(this._overlay);
+
+        // Center after layout so dimensions are known
+        this._overlay.connect('notify::width', () => {
+            const m = Main.layoutManager.primaryMonitor;
+            this._overlay.set_position(
+                Math.floor(m.x + (m.width - this._overlay.width) / 2),
+                Math.floor(m.y + (m.height - this._overlay.height) / 2),
+            );
+        });
+    }
+
+    _highlightIndex(index) {
+        for (let i = 0; i < this._iconBoxes.length; i++) {
+            this._iconBoxes[i].style = i === index
+                ? 'padding: 6px; border-radius: 8px; background-color: rgba(255,255,255,0.2);'
+                : 'padding: 6px; border-radius: 8px;';
+        }
+    }
+
+    _destroyOverlay() {
+        if (this._overlay) {
+            Main.uiGroup.remove_child(this._overlay);
+            this._overlay.destroy();
+            this._overlay = null;
+            this._iconBoxes = [];
+        }
     }
 }
